@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -38,9 +39,11 @@ public class Mochila extends JFrame implements ActionListener{
     JPanel jpan2 = new JPanel();
     JPanel jpan3 = new JPanel();
     
+    javax.swing.border.Border border = BorderFactory.createLineBorder(Color.BLACK);
+    
     int valorOptimo;
     
-    int pesoLim,articulos,columA,columB,filasF,columF;
+    int pesoLim,articulos,filasF,columF;
 
     int contador;
     
@@ -93,9 +96,9 @@ public class Mochila extends JFrame implements ActionListener{
         jpan1.setBounds(10, 120, 250, 220);
         jpan1.setBackground(Color.WHITE);
         jpan2.setBounds(10, 370, 900, 270);
-        jpan2.setBackground(Color.DARK_GRAY);
+        jpan2.setBackground(Color.WHITE);
         jpan3.setBounds(350, 120, 220, 220);
-        jpan3.setBackground(Color.DARK_GRAY);
+        jpan3.setBackground(Color.WHITE);
         
     }
     
@@ -114,7 +117,7 @@ public class Mochila extends JFrame implements ActionListener{
             lPesos = new JLabel("Digite pesos:");
             lPesos.setBounds(0,0,100,20);
             
-            lValores = new JLabel("Digite valores");
+            lValores = new JLabel("Digite valores:");
             lValores.setBounds(0,100,100,20);
             
             jpan1.add(lPesos);
@@ -123,7 +126,7 @@ public class Mochila extends JFrame implements ActionListener{
             jpan1.repaint();
             
             int x = 6;
-            int y = 0;
+            int y = 10;
             
             for(int i = 0; i<2;i++){
                 
@@ -143,7 +146,7 @@ public class Mochila extends JFrame implements ActionListener{
                         matrizA[i][j].setBounds(j*30,120,20,20);
                         jpan1.add(matrizA[i][j]); 
                         
-                        y = y +3;
+                        y = y - 3;
                         
                     }
                 }
@@ -190,7 +193,7 @@ public class Mochila extends JFrame implements ActionListener{
                     
                     } else if (i == 0 && j == 2){
                     
-                        matrizB[i][j] = new JTextArea("Costo");
+                        matrizB[i][j] = new JTextArea("Valor");
                         
                     } else if (i == 0 && j > 2){
                         
@@ -210,21 +213,42 @@ public class Mochila extends JFrame implements ActionListener{
                         
                     } else {
                         
+                        int pesoTemporal = Integer.parseInt(matrizA[0][i-1].getText());
+                        int espacioTemporal = Integer.parseInt(matrizB[0][j].getText());
+                        int valorTemporal = Integer.parseInt(matrizA[1][i-1].getText());
+                        
                         if(i == 1){
                         
-                            if(Integer.parseInt(matrizB[0][j].getText()) < Integer.parseInt(matrizA[1][i-1].getText())){
+                            if(espacioTemporal < pesoTemporal){
                             
                                 matrizB[i][j] = new JTextArea(Integer.toString(0));
                                 
                             } else {
                                 
-                                matrizB[i][j] = new JTextArea(Integer.toString(1));
+                                matrizB[i][j] = new JTextArea(Integer.toString(valorTemporal));
                                 
                             }
                             
                         } else {
                         
-                            matrizB[i][j] = new JTextArea(Integer.toString(999));
+                            int a = Integer.parseInt(matrizB[i-1][j].getText()), b;
+                            
+                            if( (espacioTemporal - pesoTemporal) < 0){
+                            
+                               b = 0;
+                                
+                                
+                            } else {
+                                
+                               b = Integer.parseInt(matrizB[i-1][j - pesoTemporal].getText()) + valorTemporal;
+                                
+                            }
+                            
+                            System.out.println(j+". "+a+", "+b);
+                            
+                            matrizB[i][j] = new JTextArea(Integer.toString(hallarMax(a,b)));
+                            
+//                            matrizB[i][j] = new JTextArea(Integer.toString(999));
                             
                         }
                         
@@ -232,6 +256,7 @@ public class Mochila extends JFrame implements ActionListener{
                         
                     }
                     
+                    matrizB[i][j].setBorder(border);
                     matrizB[i][j].setBounds(j*50,i*50,40,40);
                     jpan2.add(matrizB[i][j]);
                     
