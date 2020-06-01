@@ -31,6 +31,8 @@ public class Mochila extends JFrame implements ActionListener{
     JTextField matrizA[][];
     JTextArea matrizB[][];
     JTextField matrizF[][];
+    
+    String cadenas[][];
 
     JButton ingresar = new JButton("Ingresar");
     JButton calcular = new JButton("Calcular");
@@ -178,6 +180,7 @@ public class Mochila extends JFrame implements ActionListener{
             jpan2.removeAll();
             
             matrizB = new JTextArea[articulos + 1][pesoLim + 4];
+            cadenas = new String[articulos][pesoLim+1];
             
             for(int i = 0; i<articulos + 1;i++){
                 
@@ -221,43 +224,74 @@ public class Mochila extends JFrame implements ActionListener{
                         
                             if(espacioTemporal < pesoTemporal){
                             
-                                matrizB[i][j] = new JTextArea(Integer.toString(0));
+                                cadenas[i-1][j-3] = "0:0 ";
+                                
+                                matrizB[i][j] = new JTextArea(Integer.toString(0) + " \n" + cadenas[i-1][j-3] );
                                 
                             } else {
                                 
-                                matrizB[i][j] = new JTextArea(Integer.toString(valorTemporal));
+                                cadenas[i-1][j-3] = Integer.toString(valorTemporal)+":1 ";
+                                
+                                matrizB[i][j] = new JTextArea(Integer.toString(valorTemporal) + " \n" + cadenas[i-1][j-3]);
                                 
                             }
                             
                         } else {
-                        
-                            int a = Integer.parseInt(matrizB[i-1][j].getText()), b;
+                            
+                            String digitosA = ""; 
+                            
+                            for(int k = 0; k < matrizB[i-1][j].getText().length(); k++){
+                            
+                                if( matrizB[i-1][j].getText().charAt(k) != ' '){
+                                
+                                    digitosA = digitosA + String.valueOf(matrizB[i-1][j].getText().charAt(k));
+                                    
+                                } else{
+                                    
+                                    break;
+                                    
+                                }
+                                
+                            }
+                            
+                            int a = Integer.parseInt(digitosA), b;
                             
                             if( (espacioTemporal - pesoTemporal) < 0){
                             
                                b = 0;
                                 
-                                
                             } else {
                                 
-                               b = Integer.parseInt(matrizB[i-1][j - pesoTemporal].getText()) + valorTemporal;
+                               String digitosB = ""; 
+                            
+                                for(int k = 0; k < matrizB[i-1][j - pesoTemporal].getText().length(); k++){
+
+                                    if( matrizB[i-1][j - pesoTemporal].getText().charAt(k) != ' '){
+
+                                            digitosB = digitosB + String.valueOf(matrizB[i-1][j - pesoTemporal].getText().charAt(k));
+
+                                    } else{
+
+                                        break;
+
+                                    }
+
+                                }
+                                
+                               b = Integer.parseInt(digitosB) + valorTemporal;
                                 
                             }
-                            
-                            System.out.println(j+". "+a+", "+b);
                             
                             matrizB[i][j] = new JTextArea(Integer.toString(hallarMax(a,b)));
                             
 //                            matrizB[i][j] = new JTextArea(Integer.toString(999));
                             
                         }
-                        
-                        
-                        
+  
                     }
                     
                     matrizB[i][j].setBorder(border);
-                    matrizB[i][j].setBounds(j*50,i*50,40,40);
+                    matrizB[i][j].setBounds(j*60 + 5 ,i*50 + 5,50,40);
                     jpan2.add(matrizB[i][j]);
                     
                 }
