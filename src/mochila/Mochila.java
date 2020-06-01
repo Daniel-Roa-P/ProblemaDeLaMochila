@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
@@ -27,7 +28,7 @@ public class Mochila extends JFrame implements ActionListener{
     JTextField fieldArt = new JTextField("3");
 
     JTextField matrizA[][];
-    JTextField matrizB[][];
+    JTextArea matrizB[][];
     JTextField matrizF[][];
 
     JButton ingresar = new JButton("Ingresar");
@@ -108,7 +109,7 @@ public class Mochila extends JFrame implements ActionListener{
             
             articulos = Integer.parseInt(fieldArt.getText());   
             
-            matrizA = new JTextField[articulos][2];
+            matrizA = new JTextField[2][articulos];
             
             lPesos = new JLabel("Digite pesos:");
             lPesos.setBounds(0,0,100,20);
@@ -121,21 +122,28 @@ public class Mochila extends JFrame implements ActionListener{
             
             jpan1.repaint();
             
-            for(int i = 0; i<articulos;i++){
+            int x = 6;
+            int y = 0;
+            
+            for(int i = 0; i<2;i++){
                 
-                for(int j = 0; j<2;j++){
+                for(int j = 0; j<articulos;j++){
                     
-                    if(j==0){
+                    if(i==0){
                     
-                        matrizA[i][j] = new JTextField(Integer.toString(i*j));
-                        matrizA[i][j].setBounds(i*30,30,20,20);
+                        matrizA[i][j] = new JTextField(Integer.toString(x));
+                        matrizA[i][j].setBounds(j*30,30,20,20);
                         jpan1.add(matrizA[i][j]);
                     
+                        x = x - 2;
+                        
                     } else {
                         
-                        matrizA[i][j] = new JTextField(Integer.toString(i*j));
-                        matrizA[i][j].setBounds(i*30,120,20,20);
+                        matrizA[i][j] = new JTextField(Integer.toString(y));
+                        matrizA[i][j].setBounds(j*30,120,20,20);
                         jpan1.add(matrizA[i][j]); 
+                        
+                        y = y +3;
                         
                     }
                 }
@@ -144,19 +152,19 @@ public class Mochila extends JFrame implements ActionListener{
             
         } else if (e.getSource()==calcular){
         
-            for(int i=0;i < articulos - 1; i++) {
+            for(int i=0;i < articulos - 1 ; i++) {
             
                 for(int j=i+1; j < articulos; j++) {
 
-                    if(Integer.parseInt(matrizA[i][0].getText()) > Integer.parseInt(matrizA[j][0].getText())) {
+                    if(Integer.parseInt(matrizA[0][i].getText()) > Integer.parseInt(matrizA[0][j].getText())) {
 
-                            String temp = matrizA[i][0].getText();
-                            matrizA[i][0].setText(matrizA[j][0].getText());
-                            matrizA[j][0].setText(temp);
+                            String temp = matrizA[0][i].getText();
+                            matrizA[0][i].setText(matrizA[0][j].getText());
+                            matrizA[0][j].setText(temp);
 
-                            String tempB = matrizA[i][1].getText();
-                            matrizA[i][1].setText(matrizA[j][1].getText());
-                            matrizA[j][1].setText(tempB);
+                            String tempB = matrizA[1][i].getText();
+                            matrizA[1][i].setText(matrizA[1][j].getText());
+                            matrizA[1][j].setText(tempB);
                             
                         }
 
@@ -166,78 +174,70 @@ public class Mochila extends JFrame implements ActionListener{
             
             jpan2.removeAll();
             
-            matrizB = new JTextField[pesoLim + 4][articulos + 1];
+            matrizB = new JTextArea[articulos + 1][pesoLim + 4];
             
-            for(int i = 0; i<pesoLim + 4;i++){
+            for(int i = 0; i<articulos + 1;i++){
                 
-                for(int j = 0; j<articulos + 1;j++){
+                for(int j = 0; j<pesoLim + 4;j++){
                     
-                    if (j == 0 && i == 0){
+                    if (i == 0 && j == 0){
                     
-                        matrizB[i][j] = new JTextField("Artic.");
+                        matrizB[i][j] = new JTextArea("Artic.");
                         
-                    } else if (j == 0 && i == 1){
+                    } else if (i == 0 && j == 1){
                         
-                        matrizB[i][j] = new JTextField("Peso");
+                        matrizB[i][j] = new JTextArea("Peso");
                     
-                    } else if (j == 0 && i == 2){
+                    } else if (i == 0 && j == 2){
                     
-                        matrizB[i][j] = new JTextField("Costo");
+                        matrizB[i][j] = new JTextArea("Costo");
                         
-                    } else if (j == 0 && i > 2){
+                    } else if (i == 0 && j > 2){
                         
-                        matrizB[i][j] = new JTextField(Integer.toString(i-3));
+                        matrizB[i][j] = new JTextArea(Integer.toString(j-3));
                         
-                    } else if (i == 0 && j > 0){
+                    } else if (i > 0 && j == 0){
                         
-                         matrizB[i][j] = new JTextField(Integer.toString(j));
+                         matrizB[i][j] = new JTextArea(Integer.toString(i));
                         
-                    } else if (i == 1 && j > 0){
+                    } else if (i > 0 && j == 1){
                         
-                         matrizB[i][j] = new JTextField(matrizA[j-1][0].getText());
+                         matrizB[i][j] = new JTextArea(matrizA[0][i-1].getText());
                         
-                    } else if (i == 2 && j > 0){
+                    } else if (i > 0 && j == 2){
                         
-                          matrizB[i][j] = new JTextField(matrizA[j-1][1].getText());
-                        
-                    } else if (j == 1 && i >2) {
-                    
-                        if(Integer.parseInt(matrizB[1][1].getText()) > pesoLim){
-                            
-                            valorOptimo = hallarMax(0,0);
-                            
-                        } else {
-                            
-                            valorOptimo = hallarMax(0,Integer.parseInt(matrizB[2][1].getText()));
-                            
-                        }
-                        
-                        matrizB[i][j] = new JTextField(Integer.toString(valorOptimo));
+                          matrizB[i][j] = new JTextArea(matrizA[1][i-1].getText());
                         
                     } else {
                         
+                        if(i == 1){
                         
-                        if((j - Integer.parseInt(matrizB[i][1].getText()))>= 0){
+                            if(Integer.parseInt(matrizB[0][j].getText()) < Integer.parseInt(matrizA[1][i-1].getText())){
                             
-                            valorOptimo = hallarMax(Integer.parseInt(matrizB[i-1][j].getText()) , (j - Integer.parseInt(matrizB[i][1].getText())) + Integer.parseInt(matrizB[i][2].getText()));
+                                matrizB[i][j] = new JTextArea(Integer.toString(0));
+                                
+                            } else {
+                                
+                                matrizB[i][j] = new JTextArea(Integer.toString(1));
+                                
+                            }
                             
                         } else {
-                            
-                            
-                            valorOptimo = hallarMax(Integer.parseInt(matrizB[i-1][j].getText()) , 0);
+                        
+                            matrizB[i][j] = new JTextArea(Integer.toString(999));
                             
                         }
                         
                         
                         
-                        matrizB[i][j] = new JTextField(Integer.toString(valorOptimo));
-                        
                     }
                     
-                    matrizB[i][j].setBounds(i*50,j*50,40,40);
+                    matrizB[i][j].setBounds(j*50,i*50,40,40);
                     jpan2.add(matrizB[i][j]);
                     
                 }
+                
+                jpan2.repaint();
                 
             }
             
