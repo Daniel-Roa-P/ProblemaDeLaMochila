@@ -291,8 +291,6 @@ public class Mochila extends JFrame implements ActionListener{
 
                             }
                             
-                            System.out.println("i: " + i + ", j: "+ j +", a:" + a + ", b:" + b + ", valor: "+valorTemporal);
-    
                         }
   
                     }
@@ -306,7 +304,68 @@ public class Mochila extends JFrame implements ActionListener{
                 jpan2.repaint();
                 
             }
+         
+            String cadenaOptima = matrizB[articulos][pesoLim + 3].getText();
             
+            matrizF = new JTextField [articulos + 2][3];
+         
+            int pesoFinal = 0 , valorFinal = 0;
+            
+            for(int i = 0; i< articulos+2; i++){
+                
+                for(int j = 0; j<3; j++){
+                    
+                    if (i == 0 && j == 0){
+                    
+                        matrizF[i][j] = new JTextField("Artic.");
+                        
+                    } else if (i == 0 && j == 1){
+                        
+                        matrizF[i][j] = new JTextField("Peso");
+                    
+                    } else if (i == 0 && j == 2){
+                    
+                        matrizF[i][j] = new JTextField("Valor");
+                        
+                    } else if(i>0 && j == 0 && i<articulos+1) {
+                        
+                        matrizF[i][j] = new JTextField(Integer.toString(i));
+                        
+                    } else {
+                        
+                        if(cadenaOptima.contains(":" + Integer.toString(i))){
+                            
+                            pesoFinal = pesoFinal + Integer.parseInt(matrizA[0][i-1].getText());
+                            valorFinal = valorFinal + Integer.parseInt(matrizA[1][i-1].getText());
+                            
+                            matrizF[i][1] = new JTextField(matrizA[0][i-1].getText());
+                            matrizF[i][2] = new JTextField(matrizA[1][i-1].getText());
+                            
+                            
+                            
+                        } else if(i==articulos+1){
+
+                            matrizF[i][0] = new JTextField(" ");
+                            matrizF[i][1] = new JTextField(Integer.toString(pesoFinal/2));
+                            matrizF[i][2] = new JTextField(Integer.toString(valorFinal/2));
+                            
+                        }else {
+                            
+                            matrizF[i][j] = new JTextField("-");
+                            
+                        }                       
+                                               
+                    }
+
+                    matrizF[i][j].setBorder(border);
+                    matrizF[i][j].setBounds(j*40 + 5 ,i*40 + 5,35,35);
+                    jpan3.add(matrizF[i][j]);
+                    
+                } 
+            
+                jpan3.repaint();
+                
+            }
             
         }
         
