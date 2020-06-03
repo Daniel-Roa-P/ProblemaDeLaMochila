@@ -1,8 +1,10 @@
 
 package mochila;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
@@ -10,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
@@ -36,8 +39,12 @@ public class Mochila extends JFrame implements ActionListener{
     JButton calcular = new JButton("Calcular");
 
     JPanel jpan1 = new JPanel(); 
-    JPanel jpan2 = new JPanel();
-    JPanel jpan3 = new JPanel();
+       
+    JScrollPane scrollPane = new JScrollPane();
+    JScrollPane scrollPane1 = new JScrollPane();
+    
+    JScrollPane scrollPane2 = new JScrollPane();
+    JScrollPane scrollPane3 = new JScrollPane();
     
     javax.swing.border.Border border = BorderFactory.createLineBorder(Color.BLACK);
     
@@ -48,8 +55,9 @@ public class Mochila extends JFrame implements ActionListener{
     int contador;
     
     public static void main(String[] args) {
-        
+
         Mochila mochila = new Mochila();
+        mochila.add(new JScrollPane(), BorderLayout.CENTER);
         mochila.setSize(1350, 710);
         mochila.setTitle("Problema de la mochila");
         mochila.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -61,11 +69,10 @@ public class Mochila extends JFrame implements ActionListener{
         
         Container c = getContentPane();
         c.setLayout(null);
-        this.getContentPane().setBackground(Color.LIGHT_GRAY);
         
+        this.getContentPane().setBackground(Color.LIGHT_GRAY);
+      
         c.add(jpan1);
-        c.add(jpan2);
-        c.add(jpan3);
         
         c.add(texto1);
         c.add(texto2);
@@ -78,6 +85,9 @@ public class Mochila extends JFrame implements ActionListener{
         
         c.add(ingresar);
         c.add(calcular);
+        
+        c.add(scrollPane1);
+        c.add(scrollPane3);
         
         texto1.setBounds(10, 100, 200, 20);
         texto2.setBounds(10, 350, 200, 20);
@@ -95,10 +105,18 @@ public class Mochila extends JFrame implements ActionListener{
      
         jpan1.setBounds(10, 120, 250, 220);
         jpan1.setBackground(Color.WHITE);
-        jpan2.setBounds(10, 370, 1300, 270);
-        jpan2.setBackground(Color.WHITE);
-        jpan3.setBounds(350, 120, 220, 220);
-        jpan3.setBackground(Color.WHITE);
+        
+        scrollPane.setBounds(10, 370, 2000, 400);
+        scrollPane.setPreferredSize(new Dimension(2000, 400));  
+        
+        scrollPane1.setBounds(10, 370, 1150, 270);
+        scrollPane1.setPreferredSize(new Dimension(1150, 270)); 
+        
+        scrollPane2.setBounds(350, 120, 200, 600);
+        scrollPane2.setPreferredSize(new Dimension(200, 600));  
+        
+        scrollPane3.setBounds(350, 120, 220, 220);
+        scrollPane3.setPreferredSize(new Dimension(220, 220));
         
     }
     
@@ -175,7 +193,7 @@ public class Mochila extends JFrame implements ActionListener{
             
             }
             
-            jpan2.removeAll();
+            scrollPane.removeAll();
             
             matrizB = new JTextArea[articulos + 1][pesoLim + 4];
             
@@ -297,15 +315,17 @@ public class Mochila extends JFrame implements ActionListener{
                     
                     matrizB[i][j].setBorder(border);
                     matrizB[i][j].setBounds(j*90 + 5 ,i*50 + 5,80,40);
-                    jpan2.add(matrizB[i][j]);
+                    scrollPane.add(matrizB[i][j]);
                     
                 }
                 
-                jpan2.repaint();
+                scrollPane.repaint();
                 
             }
          
             String cadenaOptima = matrizB[articulos][pesoLim + 3].getText();
+            
+            scrollPane2.removeAll();
             
             matrizF = new JTextField [articulos + 2][3];
          
@@ -359,14 +379,17 @@ public class Mochila extends JFrame implements ActionListener{
 
                     matrizF[i][j].setBorder(border);
                     matrizF[i][j].setBounds(j*40 + 5 ,i*40 + 5,35,35);
-                    jpan3.add(matrizF[i][j]);
+                    
+                    scrollPane2.add(matrizF[i][j]);                    
+                    scrollPane2.repaint();
                     
                 } 
-            
-                jpan3.repaint();
+                
+                scrollPane1.setViewportView(scrollPane);
+                scrollPane3.setViewportView(scrollPane2);
                 
             }
-            
+
         }
         
     }
